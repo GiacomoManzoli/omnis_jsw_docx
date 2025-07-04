@@ -1,0 +1,5 @@
+On evClick ## Event Parameters - pRow( Itemreference )
+	Prompt for input Name? Returns name
+	
+	Calculate answer as iObjJSDocx.$evalTemplate(iTemplatePath,iOutputPath,jsonData)
+	Do FileOps.$selectfilesinsystemviewer(iOutputPath)

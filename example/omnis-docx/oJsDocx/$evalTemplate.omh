@@ -1,0 +1,9 @@
+Do params.$define(templatePath,outputPath,jsonData)
+Calculate params.templatePath as pTemplatePath
+Calculate params.outputPath as pOutputPath
+Calculate params.jsonData as pJsonData
+Do $cinst.$callmethod('omnis_docx','eval_template',params,kTrue,errmsg) Returns #F
+If flag false
+	Breakpoint Failed to call JS module
+End If
+# Breakpoint

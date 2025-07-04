@@ -1,0 +1,5 @@
+# Enter your initialization code here
+# Do iObjJSDocx.$errortext
+
+Calculate iTemplatePath as "/Users/giacomo/Desktop/HelloWorld.docx"
+Calculate iOutputPath as "/Users/giacomo/Desktop/HelloWorld_eval.docx"

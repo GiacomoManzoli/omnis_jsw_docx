@@ -1,0 +1,6 @@
+# Block until complete
+Do $cinst.$callmethod('omnis_docx','test_async',,kTrue) Returns #F
+If flag false
+	Breakpoint Failed to call JS module
+End If
+Quit method iLastResult.unicode

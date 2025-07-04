@@ -1,0 +1,8 @@
+Do params.$define(templatePath)
+Calculate params.templatePath as pTemplatePath
+Do $cinst.$callmethod('omnis_docx','parse_tags',params,kTrue,errmsg) Returns #F
+If flag false
+	Breakpoint Failed to call JS module
+End If
+Breakpoint
+Do iLastResult
