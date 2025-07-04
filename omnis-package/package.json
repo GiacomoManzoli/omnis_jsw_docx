@@ -1,0 +1,6 @@
+{
+    "name": "omnis_docx",
+    "version": "0.0.1",
+    "main": "omnis_docx.mjs",
+    "type": "module"
+}

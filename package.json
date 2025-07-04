@@ -1,0 +1,17 @@
+{
+    "name": "omnis-docx",
+    "private": true,
+    "version": "0.0.1",
+    "type": "module",
+    "scripts": {
+        "build": "node esbuild.config.js"
+    },
+    "dependencies": {
+        "@types/node": "^24.0.10",
+        "easy-template-x": "^6.2.1"
+    },
+    "devDependencies": {
+        "esbuild": "^0.25.5",
+        "typescript": "~5.8.3"
+    }
+}
