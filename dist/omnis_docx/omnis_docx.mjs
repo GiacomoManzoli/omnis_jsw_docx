@@ -19665,6 +19665,54 @@ var TemplateHandler = class {
 
 // lib/docx.ts
 import * as fs from "fs";
+
+// lib/utils/parseTagsToStructured.ts
+function parseTagsToStructured(tags) {
+  const result = [];
+  const seenNames = /* @__PURE__ */ new Set();
+  let i = 0;
+  while (i < tags.length) {
+    const tag = tags[i];
+    if (tag.disposition === "Open") {
+      const name = tag.name.trim();
+      if (seenNames.has(name)) {
+        i++;
+        while (i < tags.length && tags[i].disposition !== "Close") {
+          i++;
+        }
+        i++;
+        continue;
+      }
+      const cols = [];
+      i++;
+      while (i < tags.length && tags[i].disposition !== "Close") {
+        if (tags[i].disposition === "SelfClosed") {
+          cols.push({ type: "field", name: tags[i].name.trim() });
+        }
+        i++;
+      }
+      if (cols.length === 0) {
+        result.push({ type: "flag", name });
+      } else {
+        result.push({ type: "list", name, cols });
+      }
+      seenNames.add(name);
+      i++;
+    } else if (tag.disposition === "SelfClosed") {
+      const name = tag.name.trim();
+      if (!seenNames.has(name)) {
+        result.push({ type: "field", name });
+        seenNames.add(name);
+      }
+      i++;
+    } else {
+      i++;
+    }
+  }
+  return result;
+}
+
+// lib/docx.ts
 async function evalTemplate(templatePath, outputPath, data) {
   let templateParams = {};
   if (data) {
@@ -19696,36 +19744,6 @@ async function parseTags(templatePath) {
     console.error(error);
     return {};
   }
-}
-function parseTagsToStructured(tags) {
-  const result = [];
-  let i = 0;
-  while (i < tags.length) {
-    const tag = tags[i];
-    if (tag.disposition === "Open") {
-      const name = tag.name.trim();
-      const cols = [];
-      i++;
-      while (i < tags.length && tags[i].disposition !== "Close") {
-        if (tags[i].disposition === "SelfClosed") {
-          cols.push({ type: "field", name: tags[i].name.trim() });
-        }
-        i++;
-      }
-      if (cols.length === 0) {
-        result.push({ type: "flag", name });
-      } else {
-        result.push({ type: "list", name, cols });
-      }
-      i++;
-    } else if (tag.disposition === "SelfClosed") {
-      result.push({ type: "field", name: tag.name.trim() });
-      i++;
-    } else {
-      i++;
-    }
-  }
-  return result;
 }
 
 // lib/main.ts

@@ -1,5 +1,6 @@
 import { TemplateHandler } from "easy-template-x"
 import * as fs from "fs"
+import { parseTagsToStructured } from "./utils/parseTagsToStructured"
 
 export async function evalTemplate(templatePath: string, outputPath: string, data: string) {
     let templateParams = {}
@@ -37,66 +38,6 @@ export async function parseTags(templatePath: string) {
         console.error(error)
         return {}
     }
-}
-
-type Tag = {
-    disposition: "Open" | "SelfClosed" | "Close"
-    name: string
-}
-
-type Field = {
-    type: "field"
-    name: string
-}
-
-type Flag = {
-    type: "flag"
-    name: string
-}
-
-type List = {
-    type: "list"
-    name: string
-    cols: Field[]
-}
-
-type StructuredTag = Field | Flag | List
-
-function parseTagsToStructured(tags: Tag[]): StructuredTag[] {
-    const result: StructuredTag[] = []
-    let i = 0
-
-    while (i < tags.length) {
-        const tag = tags[i]
-
-        if (tag.disposition === "Open") {
-            const name = tag.name.trim()
-            const cols: Field[] = []
-            i++
-
-            while (i < tags.length && tags[i].disposition !== "Close") {
-                if (tags[i].disposition === "SelfClosed") {
-                    cols.push({ type: "field", name: tags[i].name.trim() })
-                }
-                i++
-            }
-
-            if (cols.length === 0) {
-                result.push({ type: "flag", name })
-            } else {
-                result.push({ type: "list", name, cols })
-            }
-
-            i++ // salta il tag Close
-        } else if (tag.disposition === "SelfClosed") {
-            result.push({ type: "field", name: tag.name.trim() })
-            i++
-        } else {
-            // tag.disposition === 'Close' senza Open → ignora
-            i++
-        }
-    }
-    return result
 }
 
 // type DataObject = { [key: string]: any }
